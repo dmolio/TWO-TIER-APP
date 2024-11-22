@@ -34,11 +34,11 @@ app.use(flash());
 app.use('/',urlpages);
 app.use('/auth',require('./routes/auth'));
 
-app.listen(process.env.PORT || 5000, ()=> {
+const server = app.listen(process.env.PORT || 5000, ()=> {
     console.log("server started on port: "+process.env.PORT)
 });
 
-module.exports = app;
+module.exports = { app, server };
 
 
 
