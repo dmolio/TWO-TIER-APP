@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-nodejs
+  labels:
+    app: nodejs
+spec:
+  replicas: {{ .Values.nodejs.replicaCount }}
+  selector:
+    matchLabels:
+      app: nodejs
+  template:
+    metadata:
+      labels:
+        app: nodejs
+    spec:
+      containers:
+        - name: nodejs
+          image: "{{ .Values.nodejs.image.repository }}:{{ .Values.nodejs.image.tag }}"
+          imagePullPolicy: {{ .Values.nodejs.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.nodejs.service.port }}
+          env:
+            - name: PORT
+              value: {{ .Values.nodejs.env.PORT | quote }}
+            - name: DATABASE
+              value: {{ .Values.mysql.auth.database }}
+            - name: DATABASE_HOST
+              value: {{ .Release.Name }}-mysql
+            - name: DATABASE_USER
+              value: root
+            - name: DATABASE_PORT
+              value: {{ .Values.mysql.primary.service.port | quote }}
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-db-secrets
+                  key: mysql-root-password
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.nodejs.service.port }}
+            initialDelaySeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.nodejs.service.port }}
+            initialDelaySeconds: 5

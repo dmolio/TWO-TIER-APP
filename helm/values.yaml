@@ -1,0 +1,40 @@
+nodejs:
+  replicaCount: 2
+  image:
+    repository: dmolio/nodeapp
+    tag: latest
+    pullPolicy: Always
+  service:
+    type: ClusterIP
+    port: 5000
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+
+mysql:
+  auth:
+    rootPassword: ""
+    password: ""
+    database: "sql_login"
+  primary:
+    persistence:
+      enabled: true
+      size: 8Gi
+    service:
+      port: 3306
+
+phpmyadmin:
+  service:
+    type: ClusterIP
+  db:
+    host: {{ .Release.Name }}-mysql
+    port: 3306
+
+ingress:
+  enabled: true
+  host: bedevops.example.com
+  tls: true

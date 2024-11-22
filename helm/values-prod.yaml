@@ -1,0 +1,16 @@
+nodejs:
+  replicaCount: 3
+  image:
+    repository: dmolio/nodeapp
+    tag: stable
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 1Gi
+    requests:
+      cpu: 500m
+      memory: 512Mi
+
+ingress:
+  enabled: true
+  host: bedevops.yourdomain.com

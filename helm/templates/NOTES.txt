@@ -1,0 +1,16 @@
+Thank you for installing {{ .Chart.Name }}.
+
+Your application has been deployed successfully!
+
+Access the application:
+{{- if .Values.ingress.enabled }}
+  URL: http://{{ .Values.ingress.host }}
+  PHPMyAdmin: http://{{ .Values.ingress.host }}/phpmyadmin
+{{- else }}
+  kubectl port-forward svc/{{ .Release.Name }}-nodejs {{ .Values.nodejs.service.port }}:{{ .Values.nodejs.service.port }}
+{{- end }}
+
+Database:
+  Host: {{ .Release.Name }}-mysql
+  Port: 3306
+  Database: {{ .Values.mysql.auth.database }} 

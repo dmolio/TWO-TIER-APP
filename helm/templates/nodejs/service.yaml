@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-nodejs
+spec:
+  type: {{ .Values.nodejs.service.type }}
+  ports:
+    - port: {{ .Values.nodejs.service.port }}
+      targetPort: {{ .Values.nodejs.service.port }}
+      protocol: TCP
+  selector:
+    app: nodejs 

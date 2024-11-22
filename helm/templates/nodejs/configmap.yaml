@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-nodejs-config
+data:
+  SESSION_SECRET: "SecretStringForSession"
+  COOKIE_SECRET: "SecretStringForCookies" 
