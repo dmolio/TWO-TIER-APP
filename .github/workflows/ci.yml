@@ -15,6 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     
     services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: P@ssw0rd
+          MYSQL_DATABASE: sql_login
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      
       sonarqube:
         image: sonarqube:latest
         ports:
@@ -34,6 +43,11 @@ jobs:
         
     - name: Run Tests
       working-directory: ./APP-CODE/node_project
+      env:
+        DATABASE_HOST: localhost
+        DATABASE_USER: root
+        DATABASE_PASSWORD: P@ssw0rd
+        DATABASE: sql_login
       run: npm test
 
     - name: Wait for SonarQube to start
