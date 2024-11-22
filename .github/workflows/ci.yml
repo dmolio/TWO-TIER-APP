@@ -53,17 +53,25 @@ jobs:
     - name: Wait for SonarQube to start
       run: |
         timeout 300 bash -c 'while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' localhost:9000)" != "200" ]]; do sleep 5; done'
-        sleep 30  # Additional wait time for SonarQube to fully initialize
-        
+        sleep 30
+        # Create authentication token
+        curl -X POST -u admin:admin "http://localhost:9000/api/user_tokens/generate" \
+          -d "name=ci-token" -o token.json || true
+        echo "SONAR_TOKEN=$(cat token.json | jq -r '.token')" >> $GITHUB_ENV
+
     - name: SonarQube Analysis
+      env:
+        SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
       run: |
         npm install -g sonarqube-scanner
         sonar-scanner \
           -Dsonar.host.url=http://localhost:9000 \
-          -Dsonar.token=admin \
+          -Dsonar.login=$SONAR_TOKEN \
           -Dsonar.projectKey=node-app \
+          -Dsonar.projectName=node-app \
           -Dsonar.sources=./APP-CODE/node_project \
-          -Dsonar.exclusions=**/node_modules/**,**/*.test.js
+          -Dsonar.exclusions=**/node_modules/**,**/*.test.js \
+          -Dsonar.javascript.lcov.reportPaths=./APP-CODE/node_project/coverage/lcov.info
         
     - name: Build Docker image
       run: docker build -t ${{ env.DOCKER_USERNAME }}/nodeapp:${{ github.sha }} .
@@ -84,3 +92,6 @@ jobs:
         
     - name: Push to DockerHub
       run: docker push ${{ env.DOCKER_USERNAME }}/nodeapp:${{ github.sha }}
+
+    - name: Install jq
+      run: sudo apt-get install -y jq
