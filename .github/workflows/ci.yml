@@ -29,11 +29,11 @@ jobs:
         node-version: '16'
         
     - name: Install Dependencies
-      working-directory: ./4-two-tier-app/APP-CODE/node_project
+      working-directory: ./APP-CODE/node_project
       run: npm install
         
     - name: Run Tests
-      working-directory: ./4-two-tier-app/APP-CODE/node_project
+      working-directory: ./APP-CODE/node_project
       run: npm test
 
     - name: Wait for SonarQube to start
