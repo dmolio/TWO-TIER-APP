@@ -76,7 +76,7 @@ jobs:
     - name: Build Docker image
       working-directory: ./APP-CODE/node_project
       run: |
-        docker build \
+        docker buildx build \
           -t ${{ env.DOCKER_USERNAME }}/nodeapp:${{ github.sha }} \
           -f Dockerfile .
         
