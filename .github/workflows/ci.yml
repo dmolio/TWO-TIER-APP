@@ -76,8 +76,8 @@ jobs:
     - name: Build Docker image
       working-directory: ./APP-CODE/node_project
       run: |
-        docker buildx build \
-          -t ${{ env.DOCKER_USERNAME }}/nodeapp:${{ github.sha }} \
+        docker build \
+          -t ${{ secrets.DOCKER_USERNAME }}/nodeapp:${{ github.sha }} \
           -f Dockerfile .
         
     - name: Trivy vulnerability scan
