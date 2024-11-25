@@ -59,14 +59,14 @@ jobs:
       with:
         context: ./APP-CODE/node_project
         push: true
-        tags: ${{ env.DOCKER_USERNAME }}/nodeapp:${{ github.sha }}
+        tags: ${{ secrets.DOCKER_USERNAME }}/nodeapp:${{ github.sha }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
         
     - name: Trivy vulnerability scan
       uses: aquasecurity/trivy-action@master
       with:
-        image-ref: '${{ env.DOCKER_USERNAME }}/nodeapp:${{ github.sha }}'
+        image-ref: '${{ secrets.DOCKER_USERNAME }}/nodeapp:${{ github.sha }}'
         format: 'table'
         exit-code: '1'
         severity: 'CRITICAL'
