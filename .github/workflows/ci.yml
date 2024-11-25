@@ -8,9 +8,9 @@ on:
 
 env:
   DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  DOCKER_IMAGE: ${{ secrets.DOCKER_USERNAME }}/nodeapp
+  DOCKER_IMAGE: dmolio/nodeapp
   NODE_VERSION: '18'
-  MYSQL_ROOT_PASSWORD: P@ssw0rd
+  MYSQL_ROOT_PASSWORD: P@ss
   MYSQL_DATABASE: sql_login
 
 jobs:
@@ -75,8 +75,8 @@ jobs:
           push: false
           load: true
           tags: |
-            ${{ env.DOCKER_USERNAME }}/nodeapp:${{ github.sha }}
-            ${{ env.DOCKER_USERNAME }}/nodeapp:latest
+            dmolio/nodeapp:${{ github.sha }}
+            dmolio/nodeapp:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
           
@@ -91,13 +91,13 @@ jobs:
               --ignore-unfixed \
               --severity HIGH,CRITICAL \
               --format table \
-              ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+              dmolio/nodeapp:${{ github.sha }}
           
       - name: Push Docker image
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
-          docker push ${{ env.DOCKER_USERNAME }}/nodeapp:${{ github.sha }}
-          docker push ${{ env.DOCKER_USERNAME }}/nodeapp:latest
+          docker push dmolio/nodeapp:${{ github.sha }}
+          docker push dmolio/nodeapp:latest
 
   notify:
     name: Notify on Status
