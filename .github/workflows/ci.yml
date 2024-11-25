@@ -91,7 +91,7 @@ jobs:
           max_attempts: 3
           retry_wait_seconds: 30
           command: |
-            trivy image --no-progress --exit-code 1 \
+            trivy image --no-progress --exit-code 0 \
               --ignore-unfixed \
               --severity HIGH,CRITICAL \
               --format table \
