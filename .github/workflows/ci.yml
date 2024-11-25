@@ -80,6 +80,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           
+      - name: Install Trivy
+        run: |
+          curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.56.1
+
       - name: Run Trivy vulnerability scanner with retry
         uses: nick-fields/retry@v2
         with:
