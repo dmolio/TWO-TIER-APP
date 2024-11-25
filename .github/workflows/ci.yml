@@ -39,7 +39,7 @@ jobs:
           
       - name: Install dependencies
         working-directory: ./APP-CODE/node_project
-        run: npm ci
+        run: npm install
           
       - name: Run tests
         working-directory: ./APP-CODE/node_project
