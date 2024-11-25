@@ -35,12 +35,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
+          cache-dependency-path: './APP-CODE/node_project/package-lock.json'
           
       - name: Install dependencies
         working-directory: ./APP-CODE/node_project
-        run: |
-          rm -rf node_modules package-lock.json
-          npm install
+        run: npm ci
           
       - name: Run tests
         working-directory: ./APP-CODE/node_project
